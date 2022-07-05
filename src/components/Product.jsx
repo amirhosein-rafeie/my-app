@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import StarIcon from "@mui/icons-material/Star";
 import Comment from "@mui/icons-material/Comment";
-import { Button } from "@mui/material";
+import { Button, Hidden, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Loading from "../components/Loading";
 import Counter from "./Counter";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const Product = () => {
   const [fetchInfo, setFetchInfo] = useState({
@@ -14,6 +16,8 @@ const Product = () => {
     error: null,
   });
   const [counter, setCounter] = useState(1);
+  const { width, height } = useWindowDimensions();
+  const navigate = useNavigate();
 
   const param = useParams();
 
@@ -21,36 +25,63 @@ const Product = () => {
     fetch(`https://fakestoreapi.com/products/${param.id}`)
       .then((res) => res.json())
       .then((data) => {
-        setFetchInfo((prev) => ({ ...prev, loading: false, data }));
+        if (!data || data?.status) {
+          setFetchInfo((prev) => ({
+            ...prev,
+            loading: false,
+            error: data?.message ?? "product isn't valid",
+          }));
+        } else {
+          setFetchInfo((prev) => ({ ...prev, loading: false, data }));
+        }
       })
-      .catch((err) =>
+      .catch((err) => {
+        console.log(err);
         setFetchInfo((prev) => ({
           ...prev,
           loading: false,
-          error: err.message,
-        }))
-      );
+          error: err,
+        }));
+      });
   }, [param]);
 
   if (fetchInfo.loading) {
     return <Loading />;
   }
 
-  if (fetchInfo.error) {
-    return <p>Server Error</p>;
+  if (fetchInfo.error || !fetchInfo.data) {
+    return <p>{fetchInfo.error}</p>;
   }
 
+  console.log(fetchInfo);
+
   return (
-    <div className="product-single-container">
+    <div
+      style={{ minHeight: height - width <= 600 ? 130 : 180 }}
+      className="product-single-container"
+    >
       <div className="product-single-info-container">
+        <Hidden smDown>
+          <IconButton
+            onClick={() => navigate("/products")}
+            style={{ position: "absolute", top: 0, left: 0 }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+        </Hidden>
         <h1>{fetchInfo.data.title}</h1>
-        <h3>description</h3>
-        <p>{fetchInfo.data.description}</p>
+        <div>
+          <h3>description</h3>
+          <hr />
+          <p>{fetchInfo.data.description}</p>
+          <hr />
+        </div>
+
         <div style={{ display: "flex", alignItems: "center" }}>
           <StarIcon
             fontSize="22"
             style={{ marginRight: 10, color: "#FBCB0A" }}
-          />{" "}
+          />
           Rate: {fetchInfo.data.rating.rate}
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
