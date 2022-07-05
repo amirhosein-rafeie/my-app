@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Demo
 
-see demo: https://shopping-project-01.netlify.app/products
+see demo: https://shopping-project-01.netlify.app
 
 ## Available Scripts
 
