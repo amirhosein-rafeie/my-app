@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import StarIcon from "@mui/icons-material/Star";
 import Comment from "@mui/icons-material/Comment";
-import { Button, Hidden, IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Loading from "../components/Loading";
@@ -61,14 +61,18 @@ const Product = () => {
       className="product-single-container"
     >
       <div className="product-single-info-container">
-        <Hidden smDown>
-          <IconButton
-            onClick={() => navigate("/products")}
-            style={{ position: "absolute", top: 0, left: 0 }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
-        </Hidden>
+        <IconButton
+          onClick={() => navigate("/products")}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            display: width <= 1080 ? "none" : "inline-block",
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+
         <h1>{fetchInfo.data.title}</h1>
         <div>
           <h3>description</h3>

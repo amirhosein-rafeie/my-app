@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Menu from "@mui/icons-material/Menu";
 import { Hidden, IconButton } from "@mui/material";
 import SwipeableTemporaryDrawer from "./Drawer";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 let timeout;
 let scroll = 0;
@@ -11,6 +12,7 @@ const Header = () => {
   const [state, setState] = useState(false);
 
   const navigate = useNavigate();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     window.onscroll = () => {
@@ -39,18 +41,23 @@ const Header = () => {
         <div className="sidebar-menu-item" onClick={() => navigate("products")}>
           Products
         </div>
-        <Hidden smUp>
-          <IconButton onClick={() => setState(true)}>
-            <Menu
-              style={{
-                width: 40,
-                height: 40,
-                cursor: "pointer",
-                color: "#fff",
-              }}
-            />
-          </IconButton>
-        </Hidden>
+
+        <IconButton
+          style={{
+            display: width >= 1080 ? "none" : "inline-block",
+          }}
+          onClick={() => setState(true)}
+        >
+          <Menu
+            style={{
+              width: 40,
+              height: 40,
+              cursor: "pointer",
+              color: "#fff",
+            }}
+          />
+        </IconButton>
+
         <SwipeableTemporaryDrawer state={state} setState={setState} />
       </div>
     </div>
