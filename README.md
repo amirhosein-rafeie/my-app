@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Demo
+
+see demo: https://shopping-project-01.netlify.app/products
+
 ## Available Scripts
 
 In the project directory, you can run:
